@@ -43,7 +43,9 @@ const Create = () => {
       .catch((error) => {
         console.log(error);
       });
-  };
+      navigate('/');
+    };
+
 
   const { postId, postProfile, reqExperience, postDesc } = form;
 
@@ -134,7 +136,6 @@ const Create = () => {
             sx={{ width: "50%", margin: "2% auto" }}
             variant="contained"
             type="submit"
-            onClick={()=>navigate("/")}
           >
             Submit
           </Button>

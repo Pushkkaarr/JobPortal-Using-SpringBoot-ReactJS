@@ -1,9 +1,14 @@
 import React from 'react'
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import SearchIcon from '@mui/icons-material/Search';
+
 import {
+  Box,
     Card,
     Grid,
+    InputAdornment,
+    TextField,
     Typography,
   } from "@mui/material";
   import axios from "axios";
@@ -11,6 +16,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 const Search = () => {
+    const [query, setQuery] = useState("");
     const [post, setPost] = useState(null);
     const navigate = useNavigate();
 
@@ -19,17 +25,22 @@ const handleEdit = (id) => {
 }
 
     useEffect(() => {
+      const fetchPosts = async () => {
+        const response = await axios.get(`http://localhost:8080/jobPosts/keyword/${query}`);    
+        setPost(response.data);
+      };
         const fetchInitialPosts = async () => {
             const response = await axios.get(`http://localhost:8080/jobPosts`);
             setPost(response.data);
         }
          fetchInitialPosts();
-      }, []);
+         if (query.length === 0) fetchInitialPosts();
+         if (query.length > 2) fetchPosts();
+      }, [query]);
 
       const handleDelete = (id) => {
         async function deletePost() {
           await axios.delete(`http://localhost:8080/jobPost/${id}`);
-          console.log("Delete")
       }
       deletePost();
       window.location.reload();
@@ -39,6 +50,21 @@ const handleEdit = (id) => {
     <>
       <Grid container spacing={2} sx={{ margin: "2%" }}>
       <Grid item xs={12} sx={12} md={12} lg={12}>
+      <Box>
+          <TextField
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+            placeholder="Search..."
+            sx={{ width: "75%",margin: "auto"}}
+            fullWidth
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </Box>
       </Grid>
       {post &&
         post.map((p) => {

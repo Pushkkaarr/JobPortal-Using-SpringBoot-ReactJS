@@ -1,3 +1,4 @@
+
 import React from 'react'
 import {
     AppBar,
@@ -27,7 +28,7 @@ const Navbar = () => {
                 <Button variant="outlined" href='http://localhost:3000/create'>Add Job</Button>
               </Box>
               <Box sx={{ m: 0.5, mx: 'auto', width: 180 }}>
-                <Button variant="outlined" href='https://telusko.com/'>Contact Us</Button>
+                <Button variant="outlined" href='https://github.com/Pushkkaarr'>Contact Us</Button>
                </Box>
         </Toolbar>
       </AppBar>
