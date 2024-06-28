@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins  ="https://localhost:3000")
+@CrossOrigin(origins  ="https://localhost:3000") //this allows request's from the 3000 port number (React Port)
 public class JobRestController {
 
     @Autowired
     private JobService service;
-
 
     @GetMapping("jobPost/{postId}")
     @ResponseBody
@@ -29,17 +28,11 @@ public class JobRestController {
         return service.getAllJobPosts();
     }
 
-    @PostMapping("/addjob")
-    public String addjob() {
-        return "addjob";
+    @PostMapping("jobPost")
+    public void addjob(@RequestBody JobPost job) {
+        service.addJobPost(job);
     }
 
-    //    this explicilty tell this method uses POST , takes data from addjob Page and saves it .
-    @PostMapping("/handleForm")
-    public String handleForm(JobPost jobPost) {
-        service.addJobPost(jobPost);
-        return "success";
-    }
 
     @PutMapping("jobPost")
     public JobPost updateJob(@RequestBody JobPost job) {
@@ -62,12 +55,4 @@ public class JobRestController {
         return "jobpostlist";
     }
 
-    @GetMapping("/viewalljobs")
-    public String viewJobs(Model model) {
-        List<JobPost> jobPosts = service.getAllJobPosts();
-        model.addAttribute("jobPosts", jobPosts);
-        return "viewalljobs";
-    }
 }
-
-
