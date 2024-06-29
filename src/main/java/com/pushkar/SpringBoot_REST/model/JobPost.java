@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 //     This are all annotations of LomBok , which helps to reduce code
