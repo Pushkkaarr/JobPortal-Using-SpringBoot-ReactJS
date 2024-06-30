@@ -13,7 +13,7 @@ public class LoggingAspect {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggingAspect.class);
 
                  //return type, class-name.method-name(args)  --format of below stars
-    @Before("execution(* com.pushkar.SpringBoot_REST.service.*(..)")
+    @Before("execution(* com.pushkar.SpringBoot_REST.service.JobService.*(..))")
     public void logMethodCall(){
         LOGGER.info("Method Called");
     }
