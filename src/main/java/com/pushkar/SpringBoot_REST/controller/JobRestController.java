@@ -1,9 +1,8 @@
-package com.pushkar.SpringBoot_REST;
+package com.pushkar.SpringBoot_REST.controller;
 
 import com.pushkar.SpringBoot_REST.model.JobPost;
 import com.pushkar.SpringBoot_REST.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
