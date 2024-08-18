@@ -25,17 +25,23 @@ const handleEdit = (id) => {
 }
 
     useEffect(() => {
-      const fetchPosts = async () => {
-        const response = await axios.get(`http://localhost:8080/jobPosts/keyword/${query}`);    
-        setPost(response.data);
-      };
-        const fetchInitialPosts = async () => {
-            const response = await axios.get(`http://localhost:8080/jobPosts`);
-            setPost(response.data);
-        }
-         fetchInitialPosts();
-         if (query.length === 0) fetchInitialPosts();
-         if (query.length > 2) fetchPosts();
+
+      try {
+        const fetchPosts = async () => {
+          const response = await axios.get(`http://localhost:8080/jobPosts/keyword/${query}`);    
+          setPost(response.data);
+        };
+          const fetchInitialPosts = async () => {
+              const response = await axios.get(`http://localhost:8080/jobPosts`);
+              setPost(response.data);
+          }
+           fetchInitialPosts();
+           if (query.length === 0) fetchInitialPosts();
+           if (query.length > 2) fetchPosts();
+      } catch (error) {
+        console.log(error); 
+      }
+  
       }, [query]);
 
       const handleDelete = (id) => {

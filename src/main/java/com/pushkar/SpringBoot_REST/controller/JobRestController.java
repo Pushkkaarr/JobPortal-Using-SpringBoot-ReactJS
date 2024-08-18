@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins  ="http://localhost:3000") //this allows request's from the 3000 port number (React Port)
+@CrossOrigin(origins = "http://localhost:3000") //this allows request's from the 3000 port number (React Port)
 public class JobRestController {
 
     @Autowired
