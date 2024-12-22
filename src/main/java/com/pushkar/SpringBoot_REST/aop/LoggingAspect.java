@@ -6,6 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+
+// this directory mainly contains the classes , that are used for validation purposes to check if project is properly ,
+//without messing the business logic , this keeps code clean and easy to read
+// these are of no use for users , we developers use it for verifying the current condition of the project
 @Component
 @Aspect
 public class LoggingAspect {

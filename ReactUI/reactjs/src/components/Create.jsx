@@ -1,147 +1,83 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React from 'react'
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import {
-  Typography,
-  TextField,
-  Button,
-  Paper,
-  Box,
-} from "@mui/material";
-import { useNavigate } from "react-router-dom";
-const initial = { postId:"",postProfile: "", reqExperience: 0, postTechStack: [], postDesc:"" };
+    Card,
+    Grid,
+    Typography,
+  } from "@mui/material";
+  import axios from "axios";
+  import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
+const Search = () => {
+    const [post, setPost] = useState(null);
+    const navigate = useNavigate();
 
-const Create = () => {
-  const skillSet = [
-    {
-      name: "Javascript"
-    },
-    {
-      name: "Java"
-    },
-    {
-      name: "Python"
-    },
-    {
-      name: "Django"
-    },
-    {
-      name: "Rust"
-    }
-  ];
-
-  const navigate = useNavigate();
-  const [form, setForm] = useState(initial);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios
-      .post("http://localhost:8080/jobPost",form)
-      .then((resp) => {
-        console.log(resp.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const { postId, postProfile, reqExperience, postDesc } = form;
-
-  const handleChange = (e) => {
-    setForm({...form , postTechStack : [...form.postTechStack, e.target.value]});
-  }
-
-  
-
-  return (
-    <Paper sx={{ padding:"1%"}} elevation={0}>
-      <Typography sx={{ margin: "3% auto" }} align="center" variant="h5">
-        Create New Post
-      </Typography>
-      <form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-          }}
-        >
-           <TextField
-            min="0"
-            type="number"
-            sx={{ width: "50%", margin: "2% auto" }}
-            
-            onChange={(e) => setForm({ ...form, postId: e.target.value })}
-            label="Enter your Post ID"
-            variant="outlined"
-            value={postId}
-          />
-          <TextField
-            type="string"
-            sx={{ width: "50%", margin: "2% auto" }}
-            required
-            onChange={(e) => setForm({ ...form, postProfile: e.target.value })}
-            label="Job-Profile"
-            variant="outlined"
-            value={postProfile}
-          />
-          <TextField
-            min="0"
-            type="number"
-            sx={{ width: "50%", margin: "2% auto" }}
-            required
-            onChange={(e) => setForm({ ...form, reqExperience: e.target.value })}
-            label="Years of Experience"
-            variant="outlined"
-            value={reqExperience}
-          />
-           <TextField
-            type="string"
-            sx={{ width: "50%", margin: "2% auto" }}
-            required
-            multiline
-            rows={4}
-            onChange={(e) => setForm({ ...form, postDesc: e.target.value })}
-            label="Job-desc"
-            variant="outlined"
-            value={postDesc}
-          />
-          <Box sx={{ margin:"1% auto"}}>
-          <h3>Please mention required skills</h3>
-         <ul>
-        {skillSet.map(({ name }, index) => {
-          return (
-            <li key={index}>
-              <div >
-                <div>
-                  <input
-                    type="checkbox"
-                    id={`custom-checkbox-${index}`}
-                    name={name}
-                    value={name}
-                    onChange={handleChange}  
-                  />
-                  <label htmlFor={`custom-checkbox-${index}`}>{name}</label>
-                </div>
-              </div>
-            </li>
-          );
-        })}
-       
-      </ul>
-          </Box>
-          <Button
-            sx={{ width: "50%", margin: "2% auto" }}
-            variant="contained"
-            type="submit"
-            onClick={()=>navigate("/")}
-          >
-            Submit
-          </Button>
-        </Box>
-      </form>
-    </Paper>
-  );
+const handleEdit = (id) => {
+  navigate("/edit",{state:{id}});
 }
 
-export default Create
+    useEffect(() => {
+        const fetchInitialPosts = async () => {
+            const response = await axios.get(`http://localhost:8080/jobPosts`);
+            setPost(response.data);
+        }
+         fetchInitialPosts();
+      }, []);
+
+      const handleDelete = (id) => {
+        async function deletePost() {
+          await axios.delete(`http://localhost:8080/jobPost/${id}`);
+          console.log("Delete")
+      }
+      deletePost();
+      window.location.reload();
+      }
+
+  return (
+    <>
+      <Grid container spacing={2} sx={{ margin: "2%" }}>
+      <Grid item xs={12} sx={12} md={12} lg={12}>
+      </Grid>
+      {post &&
+        post.map((p) => {
+          return (
+            <Grid key={p.id} item xs={12} md={6} lg={4}>
+              <Card sx={{ padding: "3%", overflow: "hidden", width: "84%", backgroundColor:"#ADD8E6" }}>
+                <Typography
+                  variant="h5"
+                  sx={{ fontSize: "2rem", fontWeight: "600", fontFamily:"sans-serif" }}
+                >
+             {p.postProfile}
+                </Typography>
+                <Typography  sx={{ color: "#585858", marginTop:"2%", fontFamily:"cursive" }} variant="body" >
+                  Description: {p.postDesc}
+                </Typography>
+                <br />
+                <br />
+                <Typography variant="h6" sx={{ fontFamily:"unset", fontSize:"400"}}>
+                  Experience: {p.reqExperience} years
+                </Typography>
+                <Typography sx={{fontFamily:"serif",fontSize:"400"}} gutterBottom  variant="body">Skills : </Typography>
+                {p.postTechStack.map((s, i) => {
+                  return (
+                    <Typography variant="body" gutterBottom key={i}>
+                      {s} .
+                      {` `}
+                    </Typography>
+                  );
+                })}
+               <DeleteIcon onClick={() => handleDelete(p.postId)} />
+                <EditIcon onClick={() => handleEdit(p.postId)} />
+              </Card>
+            </Grid>
+          );
+        })}
+    </Grid>
+    </>
+
+  )
+}
+
+export default Search
